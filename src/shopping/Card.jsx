@@ -1,17 +1,28 @@
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Card = ({ cardData }) => {
-  const { shopping, setShopping } = useContext(CartContext);
+  const {
+    shopping: { cart },
+    dispatch,
+  } = useContext(CartContext);
   const { productName, Price, description, imageUrl } = cardData;
+
   const addToCart = () => {
-    setShopping({
-      ...shopping,
-      cart: [...shopping.cart, cardData],
+    if (cart.includes(cardData)) {
+      return toast.error('This Item is Already added in Cart');
+    }
+    dispatch({
+      type: 'add',
+      product: cardData,
     });
   };
+
   return (
     <div className=" rounded-lg shadow-xl p-3">
+      <ToastContainer />
       <section>
         <img src={imageUrl} alt="" />
       </section>
